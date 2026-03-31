@@ -1,6 +1,5 @@
 
 const Leave = require('../models/Leave');
-const { leaveSchema } = require('../validators/leaveValidator');
 
 // Helper function
 function calculateLeaveDays(fromDate, toDate, halfDayCheck) {
@@ -16,15 +15,6 @@ function calculateLeaveDays(fromDate, toDate, halfDayCheck) {
 // CREATE
 exports.applyLeave = async (req, res) => {
   try {
-    
-    // ✅ VALIDATION
-    const { error } = leaveSchema.validate(req.body);
-    
-    if (error) {
-      return res.status(400).json({
-        message: error.details[0].message
-      });
-    }
 
     const { name, fromDate, toDate, halfDayCheck } = req.body;
     const totalDays = calculateLeaveDays(fromDate, toDate, halfDayCheck);
@@ -81,13 +71,7 @@ exports.getLeaveById = async (req, res) => {
 // UPDATE
 exports.updateLeave = async (req, res) => {
   try {
-    const { error } = leaveSchema.validate(req.body);
-
-    if (error) {
-      return res.status(400).json({
-        message: error.details[0].message
-      });
-    }
+    
     const { name, fromDate, toDate, halfDayCheck } = req.body;
 
     const totalDays = calculateLeaveDays(fromDate, toDate, halfDayCheck);
