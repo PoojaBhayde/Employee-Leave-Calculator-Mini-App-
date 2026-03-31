@@ -1,6 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const leaveRoutes = require('./routes/leave');
+const leaveRoutes = require('./routes/leaveRoutes');
 
 const app = express();
 
