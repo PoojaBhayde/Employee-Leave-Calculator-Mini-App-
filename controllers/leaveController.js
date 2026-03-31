@@ -32,8 +32,7 @@ exports.applyLeave = async (req, res) => {
     }
 
     const totalDays = calculateLeaveDays(fromDate, toDate, halfDayCheck);
-    const dayParts = getDayPart(halfDayCheck);
-
+  
     const leave = await Leave.create({
       name,
       fromDate,
@@ -89,7 +88,6 @@ exports.updateLeave = async (req, res) => {
     const { name, fromDate, toDate, halfDayCheck } = req.body;
 
     const totalDays = calculateLeaveDays(fromDate, toDate, halfDayCheck);
-    const dayParts = getDayPart(halfDayCheck);
 
     const updated = await Leave.findByIdAndUpdate(
       req.params.id,
@@ -98,8 +96,7 @@ exports.updateLeave = async (req, res) => {
         fromDate,
         toDate,
         halfDayCheck,
-        totalDays,
-        ...dayParts
+        totalDays
       },
       { new: true }
     );
