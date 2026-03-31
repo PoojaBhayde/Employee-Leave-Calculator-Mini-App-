@@ -5,11 +5,7 @@ const leaveSchema = new mongoose.Schema({
   fromDate: { type: Date, required: true },
   toDate: { type: Date, required: true },
   halfDayCheck: { type: Boolean, default: false },
-  totalDays: Number,
-  fromDayPart: String,
-  fromDayShift: String,
-  toDayPart: String,
-  toDayShift: String
+  totalDays: Number
 }, { timestamps: true });
 
 module.exports = mongoose.model('Leave', leaveSchema);
