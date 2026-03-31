@@ -12,17 +12,6 @@ function calculateLeaveDays(fromDate, toDate, halfDayCheck) {
   return days;
 }
 
-function getDayPart(halfDayCheck) {
-  const value = halfDayCheck ? 'Half Day' : 'Full Day';
-
-  return {
-    fromDayPart: value,
-    fromDayShift: value,
-    toDayPart: value,
-    toDayShift: value
-  };
-}
-
 // CREATE
 exports.applyLeave = async (req, res) => {
   try {
@@ -40,8 +29,7 @@ exports.applyLeave = async (req, res) => {
       fromDate,
       toDate,
       halfDayCheck,
-      totalDays,
-      ...dayParts
+      totalDays
     });
 
     res.status(201).json({
