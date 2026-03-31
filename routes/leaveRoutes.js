@@ -1,73 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const Leave = require('../models/Leave');
 
-function hrmsDayPartFields(isHalfDay) {
-  const value = isHalfDay ? 'Half Day' : 'Full Day';
+const controller = require('../controllers/leaveController');
 
-  return {
-    fromDayPart: value,
-    fromDayShift: value,
-    toDayPart: value,
-    toDayShift: value
-  };
-}
+// CREATE
+router.post('/applyLeave', controller.applyLeave);
 
-// CREATE leave
-router.post('/apply', async (req, res) => {
-  try {
-    const { name, fromDate, toDate, halfDayCheck } = req.body;
+// FETCH ALL
+router.get('/getAllLeaves', controller.getLeaves);
 
-    const from = new Date(fromDate);
-    const to = new Date(toDate);
+// READ ONE
+router.get('/getLeavesById/:id', controller.getLeaveById);
 
-    let days = (to - from) / (1000 * 60 * 60 * 24) + 1;
+// UPDATE
+router.put('/updateLeaves/:id', controller.updateLeave);
 
-    if (halfDayCheck) {
-      days -= 0.5;
-    }
-
-    const dayParts = hrmsDayPartFields(halfDayCheck);
-
-    const leave = new Leave({
-      name,
-      fromDate,
-      toDate,
-      halfDayCheck,
-      totalDays: days,
-      ...dayParts
-    });
-
-    await leave.save();
-
-    res.json({
-      message: 'Leave saved successfully',
-      data: leave
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// GET all leaves
-router.get('/', async (req, res) => {
-  try {
-    const leaves = await Leave.find().sort({ createdAt: -1 });
-    res.json(leaves);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// DELETE leave
-router.delete('/:id', async (req, res) => {
-  try {
-    await Leave.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Leave deleted' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+// DELETE
+router.delete('/deleteLeaves/:id', controller.deleteLeave);
 
 module.exports = router;
