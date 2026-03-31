@@ -1,5 +1,6 @@
 
 const Leave = require('../models/Leave');
+const { leaveSchema } = require('../validators/leaveValidator');
 
 // Helper function
 function calculateLeaveDays(fromDate, toDate, halfDayCheck) {
@@ -16,6 +17,15 @@ function calculateLeaveDays(fromDate, toDate, halfDayCheck) {
 exports.applyLeave = async (req, res) => {
   try {
     const { name, fromDate, toDate, halfDayCheck } = req.body;
+    
+    // ✅ VALIDATION
+    const { error } = leaveSchema.validate(req.body);
+    
+    if (error) {
+      return res.status(400).json({
+        message: error.details[0].message
+      });
+    }
 
     if (!name || !fromDate || !toDate) {
       return res.status(400).json({ message: 'All fields are required' });
